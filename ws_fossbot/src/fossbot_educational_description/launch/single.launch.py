@@ -75,10 +75,10 @@ def generate_launch_description():
                     '-entity', 'fossbot_robot',
                         '-x', '0.0',                    # Set the initial x position
                         '-y', '0.0',                    # Set the initial y position
-                        '-z', '0.0',                    # Set the initial z position
+                        '-z', '0.1',                    # Set the initial z position
                         '-R', '0.0',                    # Set the initial roll (rotation about x-axis)
                         '-P', '0.0',                    # Set the initial pitch (rotation about y-axis)
-                        '-Y', '0.0']                   # Set the initial yaw (rotation about z-axis, in radians, 1.57 rad = 90 degrees)
+                        '-Y', '0.0']                    # Set the initial yaw (rotation about z-axis, in radians, 1.57 rad = 90 degrees)
 
     )
 
