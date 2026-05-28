@@ -28,6 +28,8 @@ docker run -it --rm \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume="$(pwd)/ws_fossbot:/fossbot_ros2/ws_fossbot" \
+    --device=/dev/dri:/dev/dri \
+    --group-add video \
     --gpus 'all,"capabilities=compute,utility,graphics"' \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
