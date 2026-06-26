@@ -3,7 +3,6 @@
 - [FossBot Educational Version](#fossbot-educational-version)
   - [Workspace preparation](#workspace-preparation)
     - [Clone the repository](#clone-the-repository)
-      - [TODO: Add the repository link](#todo-add-the-repository-link)
     - [Docker](#docker)
       - [Build the image](#build-the-image)
       - [Start the container](#start-the-container)
@@ -24,10 +23,8 @@
 
 ### Clone the repository
 
-#### TODO: Add the repository link
-
 ```bash
-git clone <repository_link>
+git clone https://github.com/LRMPUT/FOSSBotEduSim
 ```
 
 ### Docker

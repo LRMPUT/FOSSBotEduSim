@@ -1,0 +1,155 @@
+<sdf version='1.10'>
+  <world name='default'>
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>5.5645e-06 2.28758e-05 -4.23884e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- GROUND PLANE -->
+    <model name='ground_plane'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <surface><friction><ode><mu>0.5</mu><mu2>0.5</mu2></ode></friction></surface>
+        </collision>
+        <visual name='visual'>
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='building'>
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name='walls'>
+
+        <!-- ================= ROOM 1 ================= -->
+        <collision name='r1_bot'><pose>2.5 -4 0.25 0 0 0</pose><geometry><box><size>7.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r1_bot'><pose>2.5 -4 0.25 0 0 0</pose><geometry><box><size>7.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r1_left'><pose>-1 0 0.25 0 0 0</pose><geometry><box><size>0.2 8.0 0.5</size></box></geometry></collision>
+        <visual name='r1_left'><pose>-1 0 0.25 0 0 0</pose><geometry><box><size>0.2 8.0 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r1_right'><pose>6 0 0.25 0 0 0</pose><geometry><box><size>0.2 8.0 0.5</size></box></geometry></collision>
+        <visual name='r1_right'><pose>6 0 0.25 0 0 0</pose><geometry><box><size>0.2 8.0 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r1_top_l'><pose>0.75 4 0.25 0 0 0</pose><geometry><box><size>3.5 0.2 0.5</size></box></geometry></collision>
+        <visual name='r1_top_l'><pose>0.75 4 0.25 0 0 0</pose><geometry><box><size>3.5 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+        
+        <collision name='r1_top_r'><pose>4.75 4 0.25 0 0 0</pose><geometry><box><size>2.5 0.2 0.5</size></box></geometry></collision>
+        <visual name='r1_top_r'><pose>4.75 4 0.25 0 0 0</pose><geometry><box><size>2.5 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+
+        <!-- ================= ROOM 2 ================= -->
+        <collision name='r2_bot'><pose>9.5 0 0.25 0 0 0</pose><geometry><box><size>7.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r2_bot'><pose>9.5 0 0.25 0 0 0</pose><geometry><box><size>7.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <!-- Right Side Indentation Profile (3m, 5m, etc) -->
+        <collision name='r2_right_bot'><pose>13 1.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.2 0.5</size></box></geometry></collision>
+        <visual name='r2_right_bot'><pose>13 1.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r2_indent_h'><pose>11.5 3 0.25 0 0 0</pose><geometry><box><size>3.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r2_indent_h'><pose>11.5 3 0.25 0 0 0</pose><geometry><box><size>3.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r2_indent_v'><pose>10 5.5 0.25 0 0 0</pose><geometry><box><size>0.2 5.2 0.5</size></box></geometry></collision>
+        <visual name='r2_indent_v'><pose>10 5.5 0.25 0 0 0</pose><geometry><box><size>0.2 5.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r2_top_l'><pose>7.5 8 0.25 0 0 0</pose><geometry><box><size>3.0 0.2 0.5</size></box></geometry></collision>
+        <visual name='r2_top_l'><pose>7.5 8 0.25 0 0 0</pose><geometry><box><size>3.0 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r2_top_r'><pose>11.5 8 0.25 0 0 0</pose><geometry><box><size>3.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r2_top_r'><pose>11.5 8 0.25 0 0 0</pose><geometry><box><size>3.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <!-- Left wall of Room 2 (Central Divider, 1m Door) -->
+        <collision name='r2_left_top'><pose>6 6.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.0 0.5</size></box></geometry></collision>
+        <visual name='r2_left_top'><pose>6 6.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.0 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+
+        <!-- ================= ROOM 3 ================= -->
+        <collision name='r3_left_bot'><pose>0 4.25 0.25 0 0 0</pose><geometry><box><size>0.2 0.5 0.5</size></box></geometry></collision>
+        <visual name='r3_left_bot'><pose>0 4.25 0.25 0 0 0</pose><geometry><box><size>0.2 0.5 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r3_left_top'><pose>0 9.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.2 0.5</size></box></geometry></collision>
+        <visual name='r3_left_top'><pose>0 9.5 0.25 0 0 0</pose><geometry><box><size>0.2 3.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r3_top'><pose>3 11 0.25 0 0 0</pose><geometry><box><size>6.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r3_top'><pose>3 11 0.25 0 0 0</pose><geometry><box><size>6.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r3_right'><pose>6 10 0.25 0 0 0</pose><geometry><box><size>0.2 2.2 0.5</size></box></geometry></collision>
+        <visual name='r3_right'><pose>6 10 0.25 0 0 0</pose><geometry><box><size>0.2 2.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+
+        <!-- ================= CORRIDOR & ROOM 4 ================= -->
+        <collision name='corr_top'><pose>-1 8 0.25 0 0 0</pose><geometry><box><size>2.0 0.2 0.5</size></box></geometry></collision>
+        <visual name='corr_top'><pose>-1 8 0.25 0 0 0</pose><geometry><box><size>2.0 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='corr_bot'><pose>-1 4.5 0.25 0 0 0</pose><geometry><box><size>2.0 0.2 0.5</size></box></geometry></collision>
+        <visual name='corr_bot'><pose>-1 4.5 0.25 0 0 0</pose><geometry><box><size>2.0 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r4_right_top'><pose>-2 9.25 0.25 0 0 0</pose><geometry><box><size>0.2 2.5 0.5</size></box></geometry></collision>
+        <visual name='r4_right_top'><pose>-2 9.25 0.25 0 0 0</pose><geometry><box><size>0.2 2.5 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r4_top'><pose>-4 10.5 0.25 0 0 0</pose><geometry><box><size>4.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r4_top'><pose>-4 10.5 0.25 0 0 0</pose><geometry><box><size>4.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r4_left'><pose>-6 7.5 0.25 0 0 0</pose><geometry><box><size>0.2 6.2 0.5</size></box></geometry></collision>
+        <visual name='r4_left'><pose>-6 7.5 0.25 0 0 0</pose><geometry><box><size>0.2 6.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r4_bot'><pose>-4 4.5 0.25 0 0 0</pose><geometry><box><size>4.0 0.2 0.5</size></box></geometry></collision>
+        <visual name='r4_bot'><pose>-4 4.5 0.25 0 0 0</pose><geometry><box><size>4.0 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+
+        <!-- ================= ROOM 5 ================= -->
+        <collision name='r5_right'><pose>13 9 0.25 0 0 0</pose><geometry><box><size>0.2 2.2 0.5</size></box></geometry></collision>
+        <visual name='r5_right'><pose>13 9 0.25 0 0 0</pose><geometry><box><size>0.2 2.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r5_top'><pose>10.5 10 0.25 0 0 0</pose><geometry><box><size>5.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r5_top'><pose>10.5 10 0.25 0 0 0</pose><geometry><box><size>5.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r5_inner_v'><pose>8 9.5 0.25 0 0 0</pose><geometry><box><size>0.2 1.2 0.5</size></box></geometry></collision>
+        <visual name='r5_inner_v'><pose>8 9.5 0.25 0 0 0</pose><geometry><box><size>0.2 1.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+        <collision name='r5_inner_h'><pose>7 9 0.25 0 0 0</pose><geometry><box><size>2.2 0.2 0.5</size></box></geometry></collision>
+        <visual name='r5_inner_h'><pose>7 9 0.25 0 0 0</pose><geometry><box><size>2.2 0.2 0.5</size></box></geometry><material><ambient>0.1 0.16 0.42 1</ambient><diffuse>0.2 0.35 0.85 1</diffuse></material></visual>
+
+      </link>
+    </model>
+
+    <!-- SUN LIGHT -->
+    <light name='sun' type='directional'>
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>-0.5 0.5 -1</direction>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>10</range>
+        <linear>1</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+    </light>
+
+  </world>
+</sdf>
