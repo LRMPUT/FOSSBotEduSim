@@ -32,9 +32,19 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-sick-safetyscanners2-interfaces \
     && rm -rf /var/lib/apt/lists/*
 
+# NVIDIA EGL ICD - fixes the black Gazebo window on Optimus setups
+RUN mkdir -p /usr/share/glvnd/egl_vendor.d && \
+    printf '%s' '{"file_format_version":"1.0.0","ICD":{"library_path":"libEGL_nvidia.so.0"}}' \
+    > /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+
 # Set up environment for ROS2 and source it
 RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 SHELL ["/bin/bash", "-c"]
+
+# pre-cache the Depot world from Gazebo Fuel (so depot.sdf loads offline)
+RUN source /opt/ros/jazzy/setup.bash && \
+    gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot \
+    || echo "WARNING: Depot model not pre-cached (no internet at build time); it will download on first launch."
 
 # Set the working directory to /fossbot_ros2 and copy the workspace
 WORKDIR /fossbot_ros2

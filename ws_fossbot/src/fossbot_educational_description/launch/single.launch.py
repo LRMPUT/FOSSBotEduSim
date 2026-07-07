@@ -9,6 +9,7 @@ from launch_ros.actions import Node
 from launch.actions import (DeclareLaunchArgument, ExecuteProcess, LogInfo, RegisterEventHandler, TimerAction, SetEnvironmentVariable)
 from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.conditions import IfCondition
 
 
 def generate_launch_description():
@@ -73,12 +74,12 @@ def generate_launch_description():
         output='screen',
         arguments=['-topic', 'robot_description',   # The robot description is published by the rsp node on the /robot_description topic
                     '-entity', 'fossbot_robot',
-                        '-x', '0.0',                    # Set the initial x position
-                        '-y', '0.0',                    # Set the initial y position
+                        '-x', LaunchConfiguration('x'),
+                        '-y', LaunchConfiguration('y'),
                         '-z', '0.1',                    # Set the initial z position
                         '-R', '0.0',                    # Set the initial roll (rotation about x-axis)
                         '-P', '0.0',                    # Set the initial pitch (rotation about y-axis)
-                        '-Y', '0.0']                    # Set the initial yaw (rotation about z-axis, in radians, 1.57 rad = 90 degrees)
+                        '-Y', LaunchConfiguration('yaw')]
 
     )
 
@@ -104,7 +105,8 @@ def generate_launch_description():
                 executable='rviz2',
                 output="screen",
                 arguments=['-d', rviz_config_file],
-                parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}]
+                parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
+                condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
     # Define and return the LaunchDescription
@@ -116,6 +118,14 @@ def generate_launch_description():
           default_value='true',
           description='Use simulation/Gazebo clock'
         ),
+        DeclareLaunchArgument(
+          'rviz',
+          default_value='true',
+          description='Start RViz2 (set rviz:=false to use a separate RViz, e.g. nav2)'
+        ),
+        DeclareLaunchArgument('x', default_value='0.0', description='Spawn x in the gz world'),
+        DeclareLaunchArgument('y', default_value='0.0', description='Spawn y in the gz world'),
+        DeclareLaunchArgument('yaw', default_value='0.0', description='Spawn yaw in radians'),
         rsp_node,
         start_gazebo,
         spawn_entity_node,

@@ -35,6 +35,10 @@ docker run -it --rm \
     --volume="$XAUTH:$XAUTH" \
     --env="NVIDIA_VISIBLE_DEVICES=all" \
     --env="NVIDIA_DRIVER_CAPABILITIES=all" \
+    --env="__NV_PRIME_RENDER_OFFLOAD=1" \
+    --env="__GLX_VENDOR_LIBRARY_NAME=nvidia" \
+    --env="__EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/10_nvidia.json" \
+    --env="__VK_LAYER_NV_optimus=NVIDIA_only" \
     --network=host \
     --pid=host \
     --ipc=host \
