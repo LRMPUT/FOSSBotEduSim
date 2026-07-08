@@ -11,7 +11,9 @@ data_files = [
     (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
     (os.path.join('share', package_name, 'urdf'), glob('urdf/*')),
     (os.path.join('share', package_name, 'config'), glob('config/*')),
-    (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
+    (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
+    (os.path.join('share', package_name, 'worlds'), glob('worlds/*.sdf')),
+    (os.path.join('share', package_name, 'worlds', 'objects'), glob('worlds/objects/*.stl')),
 ]
 
 for path, _, files in os.walk('meshes'):
@@ -31,6 +33,8 @@ setup(
     description='The ' + package_name + ' package',
     license='TODO: License declaration',
     entry_points={
-        'console_scripts': [],
+        'console_scripts': [
+            'random_spawner = fossbot_educational_description.random_spawner:main',
+        ],
     },
 )

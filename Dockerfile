@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     sudo \
     python3-colcon-common-extensions \
     python3-rosdep \
+    python3-pip \
     ros-jazzy-ros2-controllers \
     ros-jazzy-ros2-control \
     ros-jazzy-navigation2 \

@@ -7,6 +7,8 @@
       - [Build the image](#build-the-image)
       - [Start the container](#start-the-container)
       - [Join a running container](#join-a-running-container)
+      - [Build the image for object detection](#build-the-image-for-object-detection)
+      - [Start the container for object detection](#start-the-container-for-object-detection)
     - [Native Installation](#native-installation)
       - [TODO: VERIFY THE STEPS FOR NATIVE INSTALLATION](#todo-verify-the-steps-for-native-installation)
       - [Requirements](#requirements)
@@ -40,6 +42,8 @@ The [ws_fossbot](ws_fossbot) directory is mounted as a volume in the container, 
 bash build_image.sh
 ```
 
+>[!NOTE] You can also build the image for object detection (it has additional dependencies for YOLOv11). Check the `Build the image for object detection` section below.
+
 #### Start the container
 ```bash
 bash start_container.sh
@@ -48,6 +52,24 @@ bash start_container.sh
 #### Join a running container
 ```bash
 docker exec -it ros2_fossbot_edu bash
+```
+
+#### Build the image for object detection
+If you have an NVIDIA GPU run:
+```bash
+bash build_yolo_image.sh
+```
+
+To build the image without GPU support, run:
+```bash
+bash build_yolo_image.sh --no-gpu
+```
+
+#### Start the container for object detection
+If you have an NVIDIA GPU run:
+```bash
+cd object_detection
+bash start_container.sh
 ```
 
 ### Native Installation
