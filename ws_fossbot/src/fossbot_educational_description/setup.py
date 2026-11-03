@@ -31,7 +31,7 @@ setup(
     maintainer='author',
     maintainer_email='todo@todo.com',
     description='The ' + package_name + ' package',
-    license='TODO: License declaration',
+    license='MIT',
     entry_points={
         'console_scripts': [
             'random_spawner = fossbot_educational_description.random_spawner:main',

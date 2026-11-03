@@ -22,7 +22,7 @@ setup(
     maintainer='author',
     maintainer_email='todo@todo.com',
     description='Nav2 configuration, launch and mission scripts for the educational FOSSBot',
-    license='TODO: License declaration',
+    license='MIT',
     entry_points={
         'console_scripts': [
             'depot_inventory = fossbot_educational_navigation.depot_inventory:main',

@@ -1,3 +1,10 @@
+<!--
+  Based on navigate_through_poses_w_replanning_and_recovery.xml from Nav2
+  (https://github.com/ros-navigation/navigation2), licensed under Apache-2.0.
+  See the LICENSE file in this directory or http://www.apache.org/licenses/LICENSE-2.0
+  Modified by FOSSBotEduSim contributors: default controller set to "MPPI",
+  default planner set to "NavFn".
+-->
 
 <!--
   This Behavior Tree replans the global path periodically at 1 Hz through an array of poses continuously

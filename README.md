@@ -10,7 +10,6 @@
       - [Build the image for object detection](#build-the-image-for-object-detection)
       - [Start the container for object detection](#start-the-container-for-object-detection)
     - [Native Installation](#native-installation)
-      - [TODO: VERIFY THE STEPS FOR NATIVE INSTALLATION](#todo-verify-the-steps-for-native-installation)
       - [Requirements](#requirements)
       - [Installation](#installation)
   - [Quick Start](#quick-start)
@@ -19,7 +18,7 @@
     - [Navigation](#navigation)
   - [Issues](#issues)
   - [Acknowledgements](#acknowledgements)
-  - [TODO: Add Acknowledgements](#todo-add-acknowledgements)
+  - [License](#license)
 
 ## Workspace preparation
 
@@ -76,7 +75,6 @@ bash start_container.sh
 
 You can also run the simulation natively on your machine. 
 
-#### TODO: VERIFY THE STEPS FOR NATIVE INSTALLATION
 
 #### Requirements
 - ROS2 Jazzy
@@ -155,4 +153,12 @@ If you encounter any issues, please report them in the Issues section of the rep
 
 ## Acknowledgements
 
-## TODO: Add Acknowledgements
+The original robot meshes and Gazebo description of the robot come from the [FOSSBot](https://fossbot.gr) project. The original hardware designs are in the [fossbot-hardware](https://github.com/chronis10/fossbot-hardware) repository.
+
+The Nav2 behavior tree files in [behavior_trees](ws_fossbot/src/fossbot_educational_navigation/behavior_trees) are based on the defaults that ship with [Nav2](https://github.com/ros-navigation/navigation2), and they remain under the [Apache-2.0 license](ws_fossbot/src/fossbot_educational_navigation/behavior_trees/LICENSE).
+
+The navigation labs use the [Depot](https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot) model by Open Robotics, which is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It is downloaded from Gazebo Fuel and is not stored in this repository.
+
+## License
+
+Unless otherwise noted, the code in this repository is released under the [MIT License](LICENSE). Third-party assets (the FOSSBot meshes and robot description, and the Nav2 behavior trees) stay under the terms set by their original authors. See [Acknowledgements](#acknowledgements).
