@@ -65,3 +65,17 @@ RUN source /opt/ros/jazzy/setup.bash && \
 RUN source /opt/ros/jazzy/setup.bash && colcon build --symlink-install
 
 RUN echo "source /fossbot_ros2/ws_fossbot/install/setup.bash" >> ~/.bashrc
+
+# Keep ROS 2 and Gazebo discovery on localhost so lab PCs on one network don't share topics
+ENV ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+ENV GZ_IP=127.0.0.1
+
+# Exporting a robot's ROS_DOMAIN_ID (see "Connecting to real robot") switches the shell to subnet
+# discovery so the group can reach the bridge; domain 0 (the simulation) stays on localhost
+RUN printf '%s\n' \
+    '_fossbot_discovery_range() {' \
+    '    [ "$ROS_AUTOMATIC_DISCOVERY_RANGE" = "${_FOSSBOT_RANGE:-LOCALHOST}" ] || return 0' \
+    '    if [ "${ROS_DOMAIN_ID:-0}" = 0 ]; then _FOSSBOT_RANGE=LOCALHOST; else _FOSSBOT_RANGE=SUBNET; fi' \
+    '    export ROS_AUTOMATIC_DISCOVERY_RANGE=$_FOSSBOT_RANGE' \
+    '}' \
+    'trap _fossbot_discovery_range DEBUG' >> ~/.bashrc
