@@ -129,6 +129,17 @@ Control the robot using the keyboard from the terminal
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
+### Motors and e-stop
+
+`/cmd_vel` behaves like on the real robot with [fossbot-ros2-bridge](https://github.com/LRMPUT/fossbot-ros2-bridge): the last command stays in force until a new one arrives, so send a zero `Twist` to stop. The same services are available:
+
+```bash
+ros2 service call /fossbot/estop std_srvs/srv/SetBool "{data: true}"
+ros2 service call /fossbot/enable_motors std_srvs/srv/SetBool "{data: false}"
+```
+
+Motors start enabled. Add `motors_enabled_on_start:=false` to the launch command to start with them disabled, like the real robot.
+
 ### SLAM Toolbox
 
 Build the map using the data from lidar and odometry

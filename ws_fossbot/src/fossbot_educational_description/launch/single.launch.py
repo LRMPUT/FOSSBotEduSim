@@ -95,6 +95,17 @@ def generate_launch_description():
         # arguments=['--ros-args', '-p', f'config_file:={bridge_config}'],
     )
 
+    # Motor enable and e-stop services, same as on the real robot's bridge
+    sim_hw_node = Node(
+        package='fossbot_educational_sim_hw',
+        executable='sim_hw_node',
+        output='screen',
+        parameters=[{
+            'use_sim_time': LaunchConfiguration('use_sim_time'),
+            'motors_enabled_on_start': LaunchConfiguration('motors_enabled_on_start'),
+        }],
+    )
+
 
     # Path to RViz configuration file
     rviz_config_file = os.path.join(pkg_pathfinder, 'config', 'display.rviz')
@@ -126,9 +137,15 @@ def generate_launch_description():
         DeclareLaunchArgument('x', default_value='0.0', description='Spawn x in the gz world'),
         DeclareLaunchArgument('y', default_value='0.0', description='Spawn y in the gz world'),
         DeclareLaunchArgument('yaw', default_value='0.0', description='Spawn yaw in radians'),
+        DeclareLaunchArgument(
+          'motors_enabled_on_start',
+          default_value='true',
+          description='Start with motors enabled (the real robot starts with them disabled)'
+        ),
         rsp_node,
         start_gazebo,
         spawn_entity_node,
         rviz2_node,
-        ros_gz_bridge
+        ros_gz_bridge,
+        sim_hw_node
     ])
