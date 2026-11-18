@@ -6,3 +6,6 @@
 **/ros2_laser_scan_merger/
 **/rplidar_ros2/
 .vscode/
+**/src/fossbot_lidar_processing/
+**/src/fossbot_object_detection/
+**.pyc
