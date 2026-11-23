@@ -13,5 +13,7 @@ echo "Building image with USE_GPU=$USE_GPU..."
 # Run the build command
 docker build \
     --build-arg USE_GPU=$USE_GPU \
+    --build-arg USER_UID=$(id -u) \
+    --build-arg USER_GID=$(id -g) \
     -t ros2_fossbot_edu_yolo \
     -f object_detection/Dockerfile .

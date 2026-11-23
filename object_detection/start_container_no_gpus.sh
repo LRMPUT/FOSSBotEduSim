@@ -6,7 +6,7 @@ else
       user=$SUDO_USER
 fi
 
-xhost +local:root
+xhost +SI:localuser:$(id -un)
 XAUTH=/tmp/.docker.xauth
 if [ ! -f $XAUTH ]
 then
@@ -20,6 +20,10 @@ then
     chmod a+r $XAUTH
 fi
 
+# GPU render nodes (/dev/dri/renderD*) belong to the host's 'render' group - the non-root
+# container user needs it for hardware-accelerated rendering in Gazebo/RViz
+RENDER_GID=$(getent group render | cut -d: -f3)
+
 docker run -it --rm \
     --name=ros2_fossbot_edu_yolo \
     --shm-size=1g \
@@ -30,6 +34,7 @@ docker run -it --rm \
     --volume="$(pwd)/../ws_fossbot:/fossbot_ros2/ws_fossbot" \
     --device=/dev/dri:/dev/dri \
     --group-add video \
+    ${RENDER_GID:+--group-add $RENDER_GID} \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
     --network=host \

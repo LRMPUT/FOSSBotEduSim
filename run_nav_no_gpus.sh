@@ -3,7 +3,7 @@
 # Use this on a workstation with integrated graphics. Usage: bash run_nav_no_gpus.sh   (Ctrl+C to stop)
 cd "$(dirname "$0")" || exit 1
 
-xhost +local:root >/dev/null 2>&1
+xhost +SI:localuser:$(id -un) >/dev/null 2>&1
 XAUTH=/tmp/.docker.xauth
 if [ ! -f "$XAUTH" ]; then
     xauth_list=$(xauth nlist :0 | sed -e 's/^..../ffff/')
@@ -12,6 +12,10 @@ if [ ! -f "$XAUTH" ]; then
 fi
 
 docker rm -f ros2_fossbot_edu >/dev/null 2>&1 || true
+
+# GPU render nodes (/dev/dri/renderD*) belong to the host's 'render' group - the non-root
+# container user needs it for hardware-accelerated rendering in Gazebo/RViz
+RENDER_GID=$(getent group render | cut -d: -f3)
 
 docker run -it --rm \
     --name=ros2_fossbot_edu \
@@ -23,6 +27,7 @@ docker run -it --rm \
     --volume="$(pwd)/ws_fossbot:/fossbot_ros2/ws_fossbot" \
     --device=/dev/dri:/dev/dri \
     --group-add video \
+    ${RENDER_GID:+--group-add $RENDER_GID} \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
     --network=host \

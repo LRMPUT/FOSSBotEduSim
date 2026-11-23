@@ -38,14 +38,20 @@ RUN mkdir -p /usr/share/glvnd/egl_vendor.d && \
     printf '%s' '{"file_format_version":"1.0.0","ICD":{"library_path":"libEGL_nvidia.so.0"}}' \
     > /usr/share/glvnd/egl_vendor.d/10_nvidia.json
 
-# Set up environment for ROS2 and source it
-RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
-SHELL ["/bin/bash", "-c"]
+# Non-root user matching the host user (UID/GID passed in by build_image.sh), so files
+# created in the mounted workspace are owned by the host user instead of root
+ARG USERNAME=fossbot
+ARG USER_UID=1000
+ARG USER_GID=1000
 
-# pre-cache the Depot world from Gazebo Fuel (so depot.sdf loads offline)
-RUN source /opt/ros/jazzy/setup.bash && \
-    gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot \
-    || echo "WARNING: Depot model not pre-cached (no internet at build time); it will download on first launch."
+# Ubuntu 24.04 ships a 'ubuntu' user with UID/GID 1000 - remove it so ours can take that ID
+RUN (userdel -r ubuntu 2>/dev/null || true) && \
+    (getent group $USER_GID || groupadd -g $USER_GID $USERNAME) && \
+    useradd -m -s /bin/bash -u $USER_UID -g $USER_GID -G video,dialout $USERNAME && \
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
+
+SHELL ["/bin/bash", "-c"]
 
 # Define the build argument
 ARG USE_GPU=true
@@ -60,28 +66,32 @@ RUN if [ "$USE_GPU" = "true" ]; then \
     fi && \
     pip3 install --no-cache-dir ultralytics "numpy<2.0.0"
 
-# Set up environment for ROS2 and source it
-RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
-SHELL ["/bin/bash", "-c"]
+# Copy the fossbot_ws folder from the host into the Docker image, owned by the user
+COPY --chown=$USER_UID:$USER_GID ../ws_fossbot /fossbot_ros2/ws_fossbot
+RUN chown $USER_UID:$USER_GID /fossbot_ros2
 
-# Set the working directory to /fossbot_ros2 and copy the workspace
-WORKDIR /fossbot_ros2
-
-# Copy the fossbot_ws folder from the host into the Docker image
-COPY ../ws_fossbot /fossbot_ros2/ws_fossbot
-
-# Set the working directory to the workspace
-WORKDIR /fossbot_ros2/ws_fossbot
-
-# Build the workspace
+# Install system dependencies of the workspace (needs root)
 RUN source /opt/ros/jazzy/setup.bash && \
     rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y || true
+    rosdep install --from-paths /fossbot_ros2/ws_fossbot/src --ignore-src -r -y || true
+
+# Everything below runs as the user
+USER $USERNAME
+WORKDIR /fossbot_ros2/ws_fossbot
+
+RUN rosdep update
+
+# pre-cache the Depot world from Gazebo Fuel (so depot.sdf loads offline); cached in ~/.gz
+RUN source /opt/ros/jazzy/setup.bash && \
+    gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot \
+    || echo "WARNING: Depot model not pre-cached (no internet at build time); it will download on first launch."
 
 # Build the workspace using colcon
 RUN source /opt/ros/jazzy/setup.bash && colcon build --symlink-install
 
-RUN echo "source /fossbot_ros2/ws_fossbot/install/setup.bash" >> ~/.bashrc
+# Set up environment for ROS2 and source it
+RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
+    echo "source /fossbot_ros2/ws_fossbot/install/setup.bash" >> ~/.bashrc
 
 # Keep ROS 2 and Gazebo discovery on localhost so lab PCs on one network don't share topics
 ENV ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
