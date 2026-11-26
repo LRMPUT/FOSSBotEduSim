@@ -60,7 +60,7 @@ ENV IS_GPU_ENABLED=$USE_GPU
 # Install additional Python packages
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 RUN if [ "$USE_GPU" = "true" ]; then \
-        pip3 install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cu124; \
+        pip3 install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cu132; \
     else \
         pip3 install --no-cache-dir torch torchvision; \
     fi && \
